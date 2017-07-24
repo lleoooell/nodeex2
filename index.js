@@ -1,6 +1,25 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
+var db;
 var app = express();
+
+MongoClient.connect('mongodb://localhost:27017', (err, database) => {
+    if (err) {
+        console.log(err)
+    } else {
+        db = database;
+        app.listen(3000, function() {
+            console.log('listening on 3000 and database is connected');
+        });
+
+
+    }
+})
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
 
 var liste = [{
     "id": 0,
@@ -28,14 +47,8 @@ var liste = [{
     "contact_mail": "contact@christopheds.com Www.christopheds.com"
 }];
 
-app.use(bodyParser.urlencoded({
-    extended: true
-}))
 
 
-app.listen(3000, function() {
-    console.log('listening on 3000')
-});
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/client/index.html')
@@ -46,8 +59,8 @@ app.post('/quotes', function(req, res) {
     console.log(req.body);
     console.log("my name is " + req.body.nom);
     var newUser = {
-    	nom : req.body.nom,
-    	prenom: req.body.prenom
+        nom: req.body.nom,
+        prenom: req.body.prenom
     };
     liste.push(newUser);
     // liste.push(t);
