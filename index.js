@@ -32,6 +32,7 @@ app.set('view engine', 'jade');
 
 // je déclare mes fichiers statiques
 app.use('/js', express.static('./client/js'));
+app.use('/css', express.static('./client/css'));
 
 // je renvoie l'index.html
 app.get('/', function(req, res) {
