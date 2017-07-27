@@ -27,17 +27,31 @@ promise.then(function(db) {
 	console.log('db.connected');
 	// console.log(db);
 	// je crée un nouvel eleve
-	var test = new Eleve({"nom" : 'leo'});
-	// je le save en db
-	test.save(function(err, eleve){
-		if(err){
-			return console.log(err);
-		}
-		else{
-			console.log("eleve success");
-			console.log(eleve);
-		}
+	// var test = new Eleve({"nom" : 'leo'});
+	// // je le save en db
+	// test.save(function(err, eleve){
+	// 	if(err){
+	// 		return console.log(err);
+	// 	}
+	// 	else{
+	// 		console.log("eleve success");
+	// 		console.log(eleve);
+	// 	}
+	// })
+	srcListe.forEach(function(eleveSrc){
+		console.log(eleveSrc);
+
+		var eleveToSave = new Eleve(eleveSrc);
+
+		eleveToSave.save(function(err, success){
+			if(err){
+				return console.log(err);
+			}
+			else{
+				console.log(success);
+			}
+		});
 	})
 
 });
-console.log(srcListe);
+// console.log(srcListe);

@@ -157,4 +157,4 @@ const srcListe = [
  }
 ];
 
-// module.exports = srcListe;
+module.exports = srcListe;
