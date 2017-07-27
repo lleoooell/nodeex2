@@ -13,19 +13,7 @@ var promise = mongoose.connect('mongodb://localhost:27017/ifa', {
 promise.then(function(db) {
 
 	console.log('db.connected');
-	// console.log(db);
-	// je crée un nouvel eleve
-	// var test = new Eleve({"nom" : 'leo'});
-	// // je le save en db
-	// test.save(function(err, eleve){
-	// 	if(err){
-	// 		return console.log(err);
-	// 	}
-	// 	else{
-	// 		console.log("eleve success");
-	// 		console.log(eleve);
-	// 	}
-	// })
+
 	srcListe.forEach(function(eleveSrc){
 		console.log(eleveSrc);
 
@@ -42,4 +30,3 @@ promise.then(function(db) {
 	})
 
 });
-// console.log(srcListe);

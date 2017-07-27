@@ -1,54 +1,26 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient;
-var db;
+var mongoose = require('mongoose');
+var Eleve = require('./models/eleve.js');
 var app = express();
 
-MongoClient.connect('mongodb://localhost:27017', (err, database) => {
-    if (err) {
-        console.log(err)
-    } else {
-        db = database;
-        app.listen(3000, function() {
-            console.log('listening on 3000 and database is connected');
-        });
+var promise = mongoose.connect('mongodb://localhost:27017/ifa', {
+    useMongoClient: true,
+});
+// quand la connection est réussie
+promise.then(function(db) {
 
+    console.log('db.connected');
 
-    }
-})
+    app.listen(3000, function() {
+        console.log('listening on 3000 and database is connected');
+    });
+
+});
 
 app.use(bodyParser.urlencoded({
-    extended: true
-}))
-
-var liste = [{
-    "id": 0,
-    "nom": "BOITEUX",
-    "prenom": "Rémi",
-    "javascript": "Non",
-    "fav_web": "http://motogp.com/fr",
-    "fav_web_why": "Le design est agréable et j’y trouve toutes les infos dont j’ai besoin",
-    "fav_app": "WEC (World Endurance Championship)",
-    "fav_app_why": "Pour y trouver toutes les infos quand je ne peux pas suivre les courses",
-    "before_ifa": "Chef de projets SEM",
-    "why_ifa": "Pour acquérir des compétences en développement et mieux comprendre les différents langages",
-    "contact_mail": "boiteux.remi@gmail.com"
-}, {
-    "id": 1,
-    "nom": "Dos Santos",
-    "prenom": "Christophe",
-    "javascript": "Pas d'expérience",
-    "fav_web": "behance / themeforest",
-    "fav_web_why": "",
-    "fav_app": "pas d'appli",
-    "fav_app_why": "",
-    "before_ifa": "graphiste / webdesigner",
-    "why_ifa": "Pour acquérir des compétences en développement intégration",
-    "contact_mail": "contact@christopheds.com Www.christopheds.com"
-}];
-
-
-
+        extended: true
+    }));
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/client/index.html')
@@ -68,5 +40,37 @@ app.post('/quotes', function(req, res) {
 
 });
 app.get('/api/liste', function(req, res) {
-    res.json(liste);
+     Eleve.find({},function(err, collection){
+        if(err){
+            console.log(err);
+            return res.send(500);
+        }
+        else{
+            return res.send(collection);
+        }
+    });
+    
+});
+app.get('/api/liste/:id', function(req, res) {
+    console.log(req.params);
+    console.log(req.params.id);
+    Eleve.findOne({"_id" : req.params.id},function(err, monobject){
+        if(err){
+            console.log(err);
+            return res.send(err);
+        }
+        else{
+            return res.send(monobject);
+        }
+    });
+    //  Eleve.find({},function(err, collection){
+    //     if(err){
+    //         console.log(err);
+    //         return res.send(500);
+    //     }
+    //     else{
+    //         return res.send(collection);
+    //     }
+    // });
+    
 });
