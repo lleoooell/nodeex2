@@ -23,12 +23,13 @@ function processRequest(event) {
         // parser la reponse texte en json 
         mareponseText = JSON.parse(mareponseText);
         // appel la fonction bindlist avec la réponse en param
-        mareponseText.forEach(function(eleve) {
+
+        // stocker le tableau dans la variable data
+        data = mareponseText;
+        data.forEach(function(eleve) {
             bindList(eleve);
 
         });
-        // stocker le tableau dans la variable data
-        data = mareponseText;
         // console.log(mareponse);
     }
 
@@ -73,7 +74,7 @@ function bindList(eleve) {
     // ajout btn delete
     addBtnDelete(monLi);
     // ajout btn edit
-    addBtnEdit(monLi);
+    // addBtnEdit(monLi);
 
 
     // monLi.appendChild(deleteBtn);
@@ -119,7 +120,7 @@ function detectClick(event) {
     var eleveId = myTarget.getAttribute("data-idEleve");
     console.log(eleveId);
 
-    window.location = "./profil.html" + '#' + myTarget.getAttribute("data-idEleve");
+    window.location = "./profil" + '#' + myTarget.getAttribute("data-idEleve");
 }
 
 
@@ -169,27 +170,26 @@ function deleteEleve(event) {
 };
 
 // editer un eleve
-function editEleve(event) {
-    console.log("edit");
-    document.getElementById("myForm").classList.toggle("show");
-    var myTarget = event.target.parentNode.parentNode;
-    console.log(myTarget);
-    var eleveId = myTarget.getAttribute("data-idEleve");
-    console.log(eleveId);
-    var myIndex = data.findIndex(function(i) {
-        return i._id === eleveId;
-    });
-    console.log(myIndex);
-    var monForm = document.getElementById("newUser").elements;
-    _.forIn(monForm, function(item) {
-        // console.log(item.value);
-        // console.log(item.name);
-        item.value = data[myIndex][item.name];
-        // newUser[item.name] = item.value;
+// function editEleve(event) {
+//     console.log("edit");
+//     document.getElementById("myForm").classList.toggle("show");
+//     var myTarget = event.target.parentNode.parentNode;
+//     console.log(myTarget);
+//     var eleveId = myTarget.getAttribute("data-idEleve");
+//     console.log(eleveId);
+//     var myIndex = data.findIndex(function(i) {
+//         return i._id === eleveId;
+//     });
+//     console.log(myIndex);
+//     var monForm = document.getElementById("newUser").elements;
+//     _.forIn(monForm, function(item) {
+//         // console.log(item.value);
+//         // console.log(item.name);
+//         item.value = data[myIndex][item.name];
+//         // newUser[item.name] = item.value;
 
-    });
+//     });
 
 
 
-};
-
+// };

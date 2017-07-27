@@ -38,6 +38,9 @@ app.use('/css', express.static('./client/css'));
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/client/index.html')
 });
+app.get('/profil', function(req, res) {
+    res.sendFile(__dirname + '/client/profil.html')
+});
 
 
 
