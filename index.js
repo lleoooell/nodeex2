@@ -19,6 +19,7 @@ promise.then(function(db) {
 
 });
 
+// express configs
 // j'utilise bodyparser dans toutes mes routes pour parser les res.body en json
 app.use(bodyParser.urlencoded({
     extended: true
@@ -28,6 +29,9 @@ app.use(bodyParser.urlencoded({
 app.set('views', './views');
 // je déclare mon type de moteur de rendu
 app.set('view engine', 'jade');
+
+// je déclare mes fichiers statiques
+app.use('/js', express.static('./client/js'));
 
 // je renvoie l'index.html
 app.get('/', function(req, res) {
