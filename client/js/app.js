@@ -1,6 +1,5 @@
 // je crée un tb vide pour stocker mes données
-var maListe = [];
-
+var data = [];
 // 1 : gérer la récupération de données
 // je crée mon objet requete 
 var marequete = new XMLHttpRequest();
@@ -28,8 +27,8 @@ function processRequest(event) {
             bindList(eleve);
 
         });
-        // stocker le tableau dans la variable maListe
-        maListe = mareponseText;
+        // stocker le tableau dans la variable data
+        data = mareponseText;
         // console.log(mareponse);
     }
 
@@ -177,7 +176,7 @@ function editEleve(event) {
     console.log(myTarget);
     var eleveId = myTarget.getAttribute("data-idEleve");
     console.log(eleveId);
-    var myIndex = maListe.findIndex(function(i) {
+    var myIndex = data.findIndex(function(i) {
         return i._id === eleveId;
     });
     console.log(myIndex);
@@ -185,7 +184,7 @@ function editEleve(event) {
     _.forIn(monForm, function(item) {
         // console.log(item.value);
         // console.log(item.name);
-        item.value = maListe[myIndex][item.name];
+        item.value = data[myIndex][item.name];
         // newUser[item.name] = item.value;
 
     });
