@@ -1,21 +1,9 @@
 // j'importe ma lib mongoose
 var mongoose = require('mongoose');
+var Eleve = require('./models/eleve.js');
 var srcListe = require('./data/liste.js');
 // je crée mon schema
-var eleveSchema = mongoose.Schema({
-    "nom": String, 
-    "prenom": String, 
-    "javascript": String, 
-    "fav_web": String, 
-    "fav_web_why": String, 
-    "fav_app": String, 
-    "fav_app_why": String, 
-    "before_ifa": String, 
-    "why_ifa": String, 
-    "contact_mail": String, 
-});
-// je crée un model et j'attache le schema ci dessus
-var Eleve = mongoose.model('Eleves', eleveSchema);
+
 
 // je me connecte a la db
 var promise = mongoose.connect('mongodb://localhost:27017/ifa', {
