@@ -26,9 +26,12 @@ promise.then(
 
 // express configs
 // j'utilise bodyparser dans toutes mes routes pour parser les res.body en json
+
+// prends en charge les requetes du type ("Content-type", "application/x-www-form-urlencoded")
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+// prends en charge les requetes du type ("Content-type", "application/json")
 app.use(bodyParser.json());
 // je déclare mon dossier qui contient mes vues
 app.set('views', './views');

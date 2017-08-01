@@ -129,33 +129,44 @@ function submitForm(event) {
     // event.preventDefault();
     console.log("submitted");
 
+    // je recupere tous les elements du formulaire
     var monForm = document.getElementById("newUser").elements;
+    // je crée l'objet a envoyer au server
+
     var newUser = {};
-    console.log(typeof monForm);
-    // console.log( monForm[0]);
+
+    // monform est un objet, j'utilise la methode .forIn de lodash pour itérer sur chaque clé et assigner une (clé, valeur) )à mon new user
     _.forIn(monForm, function(item) {
+
         console.log(item);
+        // ex : newUser.nom = "leo"
         newUser[item.name] = item.value;
 
     });
+    // je vérifie le newUser avant de l'envoyer
     console.log(newUser);
-    // data.push(newUser);
-    // bindList(newUser);
-    // console.log(data);
+   
+    // je crée ma nouvelle requete post pour envoyer
     var postUser = new XMLHttpRequest();
-    // j'ouvre une requete get
+    // j'ouvre une requete post vers la bonne aPI
     postUser.open('POST', "http://localhost:3000/new", true);
     // je lanche ma requete
+    
     // postUser.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    
+    // je set le header de ma requete pour lui dire que j'envoie du json
     postUser.setRequestHeader("Content-type", "application/json");
-    postUser.onreadystatechange = function() {//Call a function when the state changes.
-        if(postUser.readyState == XMLHttpRequest.DONE && postUser.status == 200) {
+
+   // je send ma requete en transformant mon newUser en string
+    postUser.send(JSON.stringify(newUser));
+
+    // j'écoute que la requete soient bien finie pour log l'information 
+    postUser.onreadystatechange = function() { //Call a function when the state changes.
+        if (postUser.readyState == XMLHttpRequest.DONE && postUser.status == 200) {
             // Request finished. Do processing here.
             console.log('req ok');
         }
     }
-    postUser.send(JSON.stringify(newUser));
-    // postUser.send(newUser);
 
 
 
