@@ -149,7 +149,7 @@ function submitForm(event) {
     // postUser.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     postUser.setRequestHeader("Content-type", "application/json");
     postUser.onreadystatechange = function() {//Call a function when the state changes.
-        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+        if(postUser.readyState == XMLHttpRequest.DONE && postUser.status == 200) {
             // Request finished. Do processing here.
             console.log('req ok');
         }
