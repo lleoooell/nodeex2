@@ -9,22 +9,27 @@ var promise = mongoose.connect('mongodb://localhost:27017/ifa', {
     useMongoClient: true,
 });
 // quand la connection est réussie
-promise.then(function(db) {
+promise.then(
+    () => {
+        console.log('db.connected');
+        // je démarre mon serveur node sur le port 3000
+        app.listen(3000, function() {
+            console.log('listening on 3000 and database is connected');
+        });
+    },
+    err => {
+        console.log('MONGO ERROR');
+        console.log(err);
+    }
 
-    console.log('db.connected');
-    // je démarre mon serveur node sur le port 3000
-    app.listen(3000, function() {
-        console.log('listening on 3000 and database is connected');
-    });
-
-});
+);
 
 // express configs
 // j'utilise bodyparser dans toutes mes routes pour parser les res.body en json
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
+app.use(bodyParser.json());
 // je déclare mon dossier qui contient mes vues
 app.set('views', './views');
 // je déclare mon type de moteur de rendu
@@ -69,11 +74,11 @@ app.get('/api/liste/:id', function(req, res) {
             console.log(err);
             return res.send(err);
         } else {
-            
+
             res.send(monobject);
         }
     });
-   
+
 
 });
 
@@ -85,8 +90,19 @@ app.post('/quotes', function(req, res) {
         nom: req.body.nom,
         prenom: req.body.prenom
     };
-    liste.push(newUser);
-    // liste.push(t);
+    res.send(200);
+
+});
+// gère les requetes post
+app.post('/new', function(req, res) {
+    // console.log(req);
+    console.log(req.body);
+    console.log("my name is " + req.body.nom);
+    // console.log("my name is " + req.body.nom);
+    // var newUser = {
+    //     nom: req.body.nom,
+    //     prenom: req.body.prenom
+    // };
     res.send(200);
 
 });
@@ -107,9 +123,9 @@ app.get('/api/liste/jade/:id', function(req, res) {
                 nom: monobject.nom,
                 prenom: monobject.prenom
             });
-           
+
         }
     });
-  
+
 
 });

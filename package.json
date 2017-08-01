@@ -2,9 +2,10 @@
   "name": "exo1",
   "version": "1.0.0",
   "description": "ma description",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "echo \"start dev server\" && nodemon server.js"
   },
   "author": "leo casagrande",
   "license": "ISC",

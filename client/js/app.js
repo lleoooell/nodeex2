@@ -128,10 +128,9 @@ function detectClick(event) {
 function submitForm(event) {
     // event.preventDefault();
     console.log("submitted");
+
     var monForm = document.getElementById("newUser").elements;
-    var newUser = {
-        id: data.length + 1
-    };
+    var newUser = {};
     console.log(typeof monForm);
     // console.log( monForm[0]);
     _.forIn(monForm, function(item) {
@@ -140,9 +139,25 @@ function submitForm(event) {
 
     });
     console.log(newUser);
-    data.push(newUser);
-    bindList(newUser);
-    console.log(data);
+    // data.push(newUser);
+    // bindList(newUser);
+    // console.log(data);
+    var postUser = new XMLHttpRequest();
+    // j'ouvre une requete get
+    postUser.open('POST', "http://localhost:3000/new", true);
+    // je lanche ma requete
+    // postUser.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    postUser.setRequestHeader("Content-type", "application/json");
+    postUser.onreadystatechange = function() {//Call a function when the state changes.
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+            // Request finished. Do processing here.
+            console.log('req ok');
+        }
+    }
+    postUser.send(JSON.stringify(newUser));
+    // postUser.send(newUser);
+
+
 
 };
 
