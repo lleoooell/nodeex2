@@ -1,5 +1,6 @@
 // je crée un tb vide pour stocker mes données
 var data = [];
+var newO = {};
 // 1 : gérer la récupération de données
 // je crée mon objet requete 
 var marequete = new XMLHttpRequest();
@@ -145,7 +146,6 @@ function submitForm(event) {
     });
     // je vérifie le newUser avant de l'envoyer
     console.log(newUser);
-   
     // je crée ma nouvelle requete post pour envoyer
     var postUser = new XMLHttpRequest();
     // j'ouvre une requete post vers la bonne aPI
@@ -157,7 +157,7 @@ function submitForm(event) {
     // je set le header de ma requete pour lui dire que j'envoie du json
     postUser.setRequestHeader("Content-type", "application/json");
 
-   // je send ma requete en transformant mon newUser en string
+   // // je send ma requete en transformant mon newUser en string
     postUser.send(JSON.stringify(newUser));
 
     // j'écoute que la requete soient bien finie pour log l'information 
@@ -165,6 +165,10 @@ function submitForm(event) {
         if (postUser.readyState == XMLHttpRequest.DONE && postUser.status == 200) {
             // Request finished. Do processing here.
             console.log('req ok');
+            console.log(postUser.responseText);
+            var addEleve = JSON.parse(postUser.responseText);
+            var addEleve = bindList(addEleve);
+
         }
     }
 

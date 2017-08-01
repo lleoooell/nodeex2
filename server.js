@@ -106,8 +106,19 @@ app.post('/new', function(req, res) {
     //     nom: req.body.nom,
     //     prenom: req.body.prenom
     // };
-    res.send(200);
+    var eleveToSave = new Eleve(req.body);
 
+    eleveToSave.save(function(err, success){
+            if(err){
+                return console.log(err);
+            }
+            else{
+                console.log(success);
+                res.send(success);
+
+            }
+        });
+    
 });
 
 // exemple de rendu html / jade
