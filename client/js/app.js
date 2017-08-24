@@ -210,8 +210,10 @@ function submitForm(event) {
             if (editEleve.readyState == XMLHttpRequest.DONE && editEleve.status == 200) {
                 // Request finished. Do processing here.
                 console.log('req ok');
+                console.log(editEleve.responseText);
                 // console.log(editEleve.responseText);
-                // var addEleve = JSON.parse(editEleve.responseText);
+                var editedEleve = JSON.parse(editEleve.responseText);
+                console.log(editedEleve);
                 // var addEleve = bindList(addEleve);
 
             }

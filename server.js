@@ -148,17 +148,26 @@ app.put('/api/edit/:id', function(req, res) {
     console.log(req.params);
     console.log(req.body);
     console.log(req.params.id);
-    Eleve.update({
-        "_id": req.params.id
-    },req.body,function(err, response){
-        if(err){
-            console.log(err);
-        }
-        if(response){
-            console.log(response);
-            res.send(200);
-        }
+    // solution 1 
+
+    // Eleve.update({
+    //     "_id": req.params.id
+    // },req.body,function(err, response){
+    //     if(err){
+    //         console.log(err);
+    //     }
+    //     if(response){
+    //         console.log(response);
+    //         res.send(200);
+    //     }
+    // });
+
+    Eleve.findByIdAndUpdate(req.params.id,req.body, { new: true }, function (err, updatedEleve) {
+      if (err) return handleError(err);
+      console.log(updatedEleve);
+      res.status(200).send(updatedEleve);
     });
+
     // Eleve.findOne({
     //     "_id": req.params.id
     // }, function(err, monobject) {
