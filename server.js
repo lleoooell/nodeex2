@@ -142,25 +142,38 @@ app.post('/api/delete', function(req, res) {
 
     
 });
-// exemple de rendu html / jade
-app.get('/api/liste/jade/:id', function(req, res) {
-    console.log(req.params);
-    console.log(req.params.id);
-    Eleve.findOne({
-        "_id": req.params.id
-    }, function(err, monobject) {
-        if (err) {
-            console.log(err);
-            return res.send(err);
-        } else {
-            return res.render('profil', {
-                title: 'Hey',
-                nom: monobject.nom,
-                prenom: monobject.prenom
-            });
 
+// exemple de rendu html / jade
+app.put('/api/edit/:id', function(req, res) {
+    console.log(req.params);
+    console.log(req.body);
+    console.log(req.params.id);
+    Eleve.update({
+        "_id": req.params.id
+    },req.body,function(err, response){
+        if(err){
+            console.log(err);
+        }
+        if(response){
+            console.log(response);
+            res.send(200);
         }
     });
+    // Eleve.findOne({
+    //     "_id": req.params.id
+    // }, function(err, monobject) {
+    //     if (err) {
+    //         console.log(err);
+    //         return res.send(err);
+    //     } else {
+    //         return res.render('profil', {
+    //             title: 'Hey',
+    //             nom: monobject.nom,
+    //             prenom: monobject.prenom
+    //         });
 
+    //     }
+    // });
+    // res.send(200);
 
 });

@@ -1,6 +1,10 @@
 // je crée un tb vide pour stocker mes données
 var data = [];
 var newO = {};
+var editMode = {
+    edit: false,
+    editId: undefined
+};
 // 1 : gérer la récupération de données
 // je crée mon objet requete 
 var marequete = new XMLHttpRequest();
@@ -69,6 +73,7 @@ function bindList(eleve) {
     monLi.classList.add("list-group-item");
     // mettre en data- l'_id de l'élève pour pouvoir le retrouver
     monLi.setAttribute("data-idEleve", eleve._id);
+    monLi.setAttribute("data-objEleve", JSON.stringify(eleve));
 
     // ajout btn profile
     addBtnProfile(monLi);
@@ -133,43 +138,85 @@ function submitForm(event) {
     // je recupere tous les elements du formulaire
     var monForm = document.getElementById("newUser").elements;
     // je crée l'objet a envoyer au server
-
     var newUser = {};
 
     // monform est un objet, j'utilise la methode .forIn de lodash pour itérer sur chaque clé et assigner une (clé, valeur) )à mon new user
     _.forIn(monForm, function(item) {
 
-        console.log(item);
-        // ex : newUser.nom = "leo"
-        newUser[item.name] = item.value;
+        if (item.value) {
+                console.log(item.name);
+
+                console.log(item.value);
+                // ex : newUser.nom = "leo"
+                newUser[item.name] = item.value;
+        }
+        
 
     });
-    // je vérifie le newUser avant de l'envoyer
-    console.log(newUser);
-    // je crée ma nouvelle requete post pour envoyer
-    var postUser = new XMLHttpRequest();
-    // j'ouvre une requete post vers la bonne aPI
-    postUser.open('POST', "http://localhost:3000/new", true);
-    // je lanche ma requete
-    
-    // postUser.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    
-    // je set le header de ma requete pour lui dire que j'envoie du json
-    postUser.setRequestHeader("Content-type", "application/json");
+    // si je suis en mode creation, alors je crée un nouvel objet
+    if (editMode.edit === false) {
+        console.log("je suis en création");
 
-   // // je send ma requete en transformant mon newUser en string
-    postUser.send(JSON.stringify(newUser));
+        // je vérifie le newUser avant de l'envoyer
+        console.log(newUser);
+        // je crée ma nouvelle requete post pour envoyer
+        var postUser = new XMLHttpRequest();
+        // j'ouvre une requete post vers la bonne aPI
+        postUser.open('POST', "http://localhost:3000/new", true);
+        // je lanche ma requete
 
-    // j'écoute que la requete soient bien finie pour log l'information 
-    postUser.onreadystatechange = function() { //Call a function when the state changes.
-        if (postUser.readyState == XMLHttpRequest.DONE && postUser.status == 200) {
-            // Request finished. Do processing here.
-            console.log('req ok');
-            console.log(postUser.responseText);
-            var addEleve = JSON.parse(postUser.responseText);
-            var addEleve = bindList(addEleve);
+        // postUser.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
+        // je set le header de ma requete pour lui dire que j'envoie du json
+        postUser.setRequestHeader("Content-type", "application/json");
+
+        // // je send ma requete en transformant mon newUser en string
+        postUser.send(JSON.stringify(newUser));
+
+        // j'écoute que la requete soient bien finie pour log l'information 
+        postUser.onreadystatechange = function() { //Call a function when the state changes.
+            if (postUser.readyState == XMLHttpRequest.DONE && postUser.status == 200) {
+                // Request finished. Do processing here.
+                console.log('req ok');
+                console.log(postUser.responseText);
+                var addEleve = JSON.parse(postUser.responseText);
+                var addEleve = bindList(addEleve);
+
+            }
         }
+    }
+    // si je suis en mode edition, j'update l'objet
+    else if (editMode.edit === true) {
+        console.log("je suis en edition");
+        console.log(editMode);
+        console.log(newUser);
+        newUser._id = editMode.editId;
+         
+        var editEleve = new XMLHttpRequest();
+        // j'ouvre une requete post vers la bonne aPI
+        editEleve.open('PUT', "http://localhost:3000/api/edit/" + editMode.editId, true);
+        // je lanche ma requete
+
+        // editEleve.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        // je set le header de ma requete pour lui dire que j'envoie du json
+        editEleve.setRequestHeader("Content-type", "application/json");
+
+        // // je send ma requete en transformant mon newUser en string
+        editEleve.send(JSON.stringify(newUser));
+
+        // j'écoute que la requete soient bien finie pour log l'information 
+        editEleve.onreadystatechange = function() { //Call a function when the state changes.
+            if (editEleve.readyState == XMLHttpRequest.DONE && editEleve.status == 200) {
+                // Request finished. Do processing here.
+                console.log('req ok');
+                // console.log(editEleve.responseText);
+                // var addEleve = JSON.parse(editEleve.responseText);
+                // var addEleve = bindList(addEleve);
+
+            }
+        }
+
     }
 
 
@@ -186,40 +233,42 @@ function deleteEleve(event) {
     console.log(myTarget);
     var eleveId = myTarget.getAttribute("data-ideleve");
     console.log(eleveId)
-    var idObj = { id : eleveId };
+    var idObj = {
+        id: eleveId
+    };
 
 
     var deleteUser = new XMLHttpRequest();
     // j'ouvre une requete post vers la bonne aPI
     deleteUser.open('POST', "http://localhost:3000/api/delete", true);
     // je lanche ma requete
-    
+
     // deleteUser.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    
+
     // je set le header de ma requete pour lui dire que j'envoie du json
     deleteUser.setRequestHeader("Content-type", "application/json");
 
-   // // je send ma requete en transformant mon newUser en string
+    // // je send ma requete en transformant mon newUser en string
     deleteUser.send(JSON.stringify(idObj));
 
     // j'écoute que la requete soient bien finie pour log l'information 
     deleteUser.onreadystatechange = function() { //Call a function when the state changes.
-        if (deleteUser.readyState == XMLHttpRequest.DONE && deleteUser.status == 200) {
-            // Request finished. Do processing here.
-            console.log('req ok');
-            myTarget.remove();
-            // console.log(postUser.responseText);
-            // var addEleve = JSON.parse(postUser.responseText);
-            // var addEleve = bindList(addEleve);
+            if (deleteUser.readyState == XMLHttpRequest.DONE && deleteUser.status == 200) {
+                // Request finished. Do processing here.
+                console.log('req ok');
+                myTarget.remove();
+                // console.log(postUser.responseText);
+                // var addEleve = JSON.parse(postUser.responseText);
+                // var addEleve = bindList(addEleve);
 
+            }
         }
-    }
-    // var myIndex = data.findIndex(function(i) {
-    //     return i.id === eleveId
-    // });
-    // data.splice(myIndex, 1);
-    // removeElem(myTarget);
-    // console.log(myIndex);
+        // var myIndex = data.findIndex(function(i) {
+        //     return i.id === eleveId
+        // });
+        // data.splice(myIndex, 1);
+        // removeElem(myTarget);
+        // console.log(myIndex);
 
     // // je cherche l'eleve correspondant a l'index
     // var monuser = dataList[myIndex];
@@ -230,23 +279,29 @@ function deleteEleve(event) {
 // editer un eleve
 function editEleve(event) {
     console.log("edit");
-    // document.getElementById("myForm").classList.toggle("show");
-    // var myTarget = event.target.parentNode.parentNode;
-    // console.log(myTarget);
-    // var eleveId = myTarget.getAttribute("data-idEleve");
-    // console.log(eleveId);
+
+    document.getElementById("myForm").classList.toggle("show");
+    var myTarget = event.target.parentNode.parentNode;
+    console.log(myTarget);
+    var objEleve = myTarget.getAttribute("data-objEleve");
+    editMode.edit = true;
+    editMode.editId = myTarget.getAttribute("data-idEleve");
+
+    console.log(objEleve);
+    objEleve = JSON.parse(objEleve);
+    console.log(objEleve._id);
     // var myIndex = data.findIndex(function(i) {
     //     return i._id === eleveId;
     // });
     // console.log(myIndex);
-    // var monForm = document.getElementById("newUser").elements;
-    // _.forIn(monForm, function(item) {
-    //     // console.log(item.value);
-    //     // console.log(item.name);
-    //     item.value = data[myIndex][item.name];
-    //     // newUser[item.name] = item.value;
+    var monForm = document.getElementById("newUser").elements;
+    _.forIn(monForm, function(item) {
+        // console.log(item.value);
+        // console.log(item.name);
+        item.value = objEleve[item.name];
+        // newUser[item.name] = item.value;
 
-    // });
+    });
 
 
 
