@@ -75,7 +75,7 @@ function bindList(eleve) {
     // ajout btn delete
     addBtnDelete(monLi);
     // ajout btn edit
-    // addBtnEdit(monLi);
+    addBtnEdit(monLi);
 
 
     // monLi.appendChild(deleteBtn);
@@ -186,11 +186,39 @@ function deleteEleve(event) {
     console.log(myTarget);
     var eleveId = myTarget.getAttribute("data-ideleve");
     console.log(eleveId)
-    var myIndex = data.findIndex(function(i) {
-        return i.id === eleveId
-    });
-    data.splice(myIndex, 1);
-    removeElem(myTarget);
+    var idObj = { id : eleveId };
+
+
+    var deleteUser = new XMLHttpRequest();
+    // j'ouvre une requete post vers la bonne aPI
+    deleteUser.open('POST', "http://localhost:3000/api/delete", true);
+    // je lanche ma requete
+    
+    // deleteUser.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    
+    // je set le header de ma requete pour lui dire que j'envoie du json
+    deleteUser.setRequestHeader("Content-type", "application/json");
+
+   // // je send ma requete en transformant mon newUser en string
+    deleteUser.send(JSON.stringify(idObj));
+
+    // j'écoute que la requete soient bien finie pour log l'information 
+    deleteUser.onreadystatechange = function() { //Call a function when the state changes.
+        if (deleteUser.readyState == XMLHttpRequest.DONE && deleteUser.status == 200) {
+            // Request finished. Do processing here.
+            console.log('req ok');
+            myTarget.remove();
+            // console.log(postUser.responseText);
+            // var addEleve = JSON.parse(postUser.responseText);
+            // var addEleve = bindList(addEleve);
+
+        }
+    }
+    // var myIndex = data.findIndex(function(i) {
+    //     return i.id === eleveId
+    // });
+    // data.splice(myIndex, 1);
+    // removeElem(myTarget);
     // console.log(myIndex);
 
     // // je cherche l'eleve correspondant a l'index
@@ -200,26 +228,26 @@ function deleteEleve(event) {
 };
 
 // editer un eleve
-// function editEleve(event) {
-//     console.log("edit");
-//     document.getElementById("myForm").classList.toggle("show");
-//     var myTarget = event.target.parentNode.parentNode;
-//     console.log(myTarget);
-//     var eleveId = myTarget.getAttribute("data-idEleve");
-//     console.log(eleveId);
-//     var myIndex = data.findIndex(function(i) {
-//         return i._id === eleveId;
-//     });
-//     console.log(myIndex);
-//     var monForm = document.getElementById("newUser").elements;
-//     _.forIn(monForm, function(item) {
-//         // console.log(item.value);
-//         // console.log(item.name);
-//         item.value = data[myIndex][item.name];
-//         // newUser[item.name] = item.value;
+function editEleve(event) {
+    console.log("edit");
+    // document.getElementById("myForm").classList.toggle("show");
+    // var myTarget = event.target.parentNode.parentNode;
+    // console.log(myTarget);
+    // var eleveId = myTarget.getAttribute("data-idEleve");
+    // console.log(eleveId);
+    // var myIndex = data.findIndex(function(i) {
+    //     return i._id === eleveId;
+    // });
+    // console.log(myIndex);
+    // var monForm = document.getElementById("newUser").elements;
+    // _.forIn(monForm, function(item) {
+    //     // console.log(item.value);
+    //     // console.log(item.name);
+    //     item.value = data[myIndex][item.name];
+    //     // newUser[item.name] = item.value;
 
-//     });
+    // });
 
 
 
-// };
+};

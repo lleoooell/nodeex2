@@ -120,7 +120,28 @@ app.post('/new', function(req, res) {
         });
     
 });
+// gère la suppression
+app.post('/api/delete', function(req, res) {
+    console.log(req.body);
+    Eleve.findByIdAndRemove(req.body.id,function(err, response){
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(response);
+            console.log("deleted");
+            res.send(200);
 
+        }
+    });
+    // console.log("my name is " + req.body.nom);
+    // var newUser = {
+    //     nom: req.body.nom,
+    //     prenom: req.body.prenom
+    // };
+
+    
+});
 // exemple de rendu html / jade
 app.get('/api/liste/jade/:id', function(req, res) {
     console.log(req.params);
